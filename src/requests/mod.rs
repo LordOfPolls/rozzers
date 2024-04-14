@@ -1,8 +1,11 @@
 mod forces;
 mod neighbourhoods;
+mod availability;
+mod crimes;
 
 pub use forces::*;
 pub use neighbourhoods::*;
+pub use availability::*;
 
 use log;
 use reqwest::RequestBuilder;
