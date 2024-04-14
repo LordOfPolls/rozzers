@@ -3,7 +3,8 @@
 pub enum Error {
     ReqwestError(reqwest::Error),
     APIError(String),
-    ClientError(String)
+    ClientError(String),
+    MaxRetriesExceeded(String)
 }
 
 impl From<reqwest::Error> for Error {

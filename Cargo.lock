@@ -746,6 +746,7 @@ version = "0.1.0"
 dependencies = [
  "chrono",
  "log",
+ "once_cell",
  "reqwest",
  "serde",
  "serde_json",

@@ -8,3 +8,4 @@ pub mod location;
 pub mod event;
 pub mod availability;
 pub mod crime_category;
+pub mod ratelimit;
