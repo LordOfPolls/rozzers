@@ -1,8 +1,11 @@
+use chrono::NaiveDate;
 use serde::{Serialize, Deserialize};
 use crate::models::engagement::EngagementMethod;
 use crate::models::officer::Officer;
+use crate::models::neighbourhood::Neighbourhood;
+use crate::models::availability::Availability;
 use crate::errors::Error;
-use crate::requests::{get_specific_force, get_force_senior_officers};
+use crate::requests::{get_specific_force, get_force_senior_officers, get_detailed_availability, list_force_neighbourhoods};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Force {
@@ -47,8 +50,22 @@ impl Force {
         get_force_senior_officers(&self.id).await
     }
 
-    pub async fn get_neighbourhoods(&self) -> Result<Vec<crate::models::neighbourhood::Neighbourhood>, Error> {
-        crate::requests::list_force_neighbourhoods(&self.id).await
+    pub async fn get_neighbourhoods(&self) -> Result<Vec<Neighbourhood>, Error> {
+        list_force_neighbourhoods(&self.id).await
+    }
+
+    pub async fn get_stop_and_search_availability(&self) -> Result<Vec<NaiveDate>, Error> {
+        let availability = get_detailed_availability().await?;
+
+        let mut available_months = vec![];
+
+        for month in availability {
+            if month.forces.contains(&self.id) {
+                available_months.push(month.date);
+            }
+        }
+
+        Ok(available_months)
     }
 }
 
@@ -76,6 +93,9 @@ mod tests {
 
             let neighbourhoods = force.get_neighbourhoods().await;
             assert!(neighbourhoods.is_ok());
+
+            let availability = force.get_stop_and_search_availability().await;
+            assert!(availability.is_ok());
         }
     }
 

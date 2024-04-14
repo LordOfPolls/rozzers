@@ -6,3 +6,5 @@ pub mod contact_details;
 pub mod link;
 pub mod location;
 pub mod event;
+pub mod availability;
+pub mod crime_category;

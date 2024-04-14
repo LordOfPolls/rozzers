@@ -1,5 +1,7 @@
+use chrono::{NaiveDate, NaiveDateTime};
 use crate::models::contact_details::ContactDetails;
 use serde::{Deserialize, Serialize};
+use crate::utils::option_deserialize_datetime;
 
 #[derive(Serialize, Deserialize)]
 pub struct Event {
@@ -27,8 +29,10 @@ pub struct Event {
     // todo: these are in ISO_8601, need to be converted to DateTime
     /// Start date of the event
     #[serde(default)]
-    pub start_date: Option<String>,
+    #[serde(deserialize_with = "option_deserialize_datetime")]
+    pub start_date: Option<NaiveDateTime>,
     /// End date of the event
     #[serde(default)]
-    pub end_date: Option<String>,
+    #[serde(deserialize_with = "option_deserialize_datetime")]
+    pub end_date: Option<NaiveDateTime>,
 }
